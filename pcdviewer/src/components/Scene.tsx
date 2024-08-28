@@ -7,12 +7,19 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { PCDLoader } from 'three/addons/loaders/PCDLoader.js';
 
 export default function Scene() {
-     const idx=useRef(0)
-    const urls = ['https://raw.githubusercontent.com/mrdoob/three.js/4b18dbe78bec6067cd98e66539efe1b157f5635f/examples/models/pcd/ascii/simple.pcd','https://segmentsai-dev.s3.eu-west-2.amazonaws.com/assets/tobias-admin/c92c069f-94b5-4b72-859b-08a7a7a141a4.pcd'];
+
+    const scene= setupScene()
+    const renderer=setupRenderer()
+    const camera=setupCamera()
+    const loader=setUpLoader()
+
+    let idx=0
+    const urls = ['https://raw.githubusercontent.com/mrdoob/three.js/4b18dbe78bec6067cd98e66539efe1b157f5635f/examples/models/pcd/ascii/simple.pcd','https://segmentsai-dev.s3.eu-west-2.amazonaws.com/assets/tobias-admin/c92c069f-94b5-4b72-859b-08a7a7a141a4.pcd','https://raw.githubusercontent.com/mrdoob/three.js/4b18dbe78bec6067cd98e66539efe1b157f5635f/examples/models/pcd/binary/Zaghetto.pcd'];
     function setupScene(){
         const scene= new THREE.Scene()
         return scene
     }
+    
     function setupRenderer(){
         const renderer = new THREE.WebGLRenderer( { antialias: true } );
         renderer.setPixelRatio( window.devicePixelRatio );
@@ -27,24 +34,24 @@ export default function Scene() {
         return camera
     }
 
+    function setUpLoader(){
+        const loader = new PCDLoader();
+        return loader
+    }
     
     
     function changePCD(e:MouseEvent<HTMLElement>){
         scene.clear()
-        if (e.currentTarget.id=="inc"){
-            idx.current=(idx.current+1) % urls.length
-
+        if (idx>=0){
+            idx=idx%urls.length
         }
         else{
-
-            idx.current=(idx.current-1) 
-            if  (idx.current<0){
-                idx.current=urls.length-1
-            }
-        
-            
-            
+            idx=urls.length-1
         }
+  
+            
+            
+        
         loadPCD()
         
     }
@@ -63,11 +70,11 @@ export default function Scene() {
 
     function loadPCD(){
         
-        const loader = new PCDLoader();
+      
         
         
 
-        loader.load( urls[idx.current], function ( points:any ) {
+        loader.load( urls[idx], function ( points: THREE.Points) {
 
             console.log(points)
 
@@ -78,44 +85,18 @@ export default function Scene() {
             render();
 
         } );
-        return loader
 
 
     } 
 
 
-    const scene= setupScene()
-    const renderer=setupRenderer()
-    const camera=setupCamera()
-    
-
-
-
-
-    useEffect(()=>{
-        
-
-
-        setupControls()
-        loadPCD()
-  
-
-
-       
-
-
-
-
-        render()
-
-
-
-})
+    setupControls()
+    loadPCD()
 
   return (
   <div id="controls">
-    <button id="dec" onClick={changePCD}  >Prev</button>
-    <button id="inc" onClick={changePCD}>Next</button>
+    <button  onClick={(e)=>{idx=idx+1 ; changePCD(e)}}  >Prev</button>
+    <button  onClick={(e)=>{idx=idx-1;changePCD(e)}}>Next</button>
 
   </div>
   );
