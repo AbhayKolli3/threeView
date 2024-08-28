@@ -13,6 +13,9 @@ export default function Scene() {
     const camera=setupCamera()
     const loader=setUpLoader()
 
+    setupControls()
+    loadPCD()
+
     let idx=0
     const urls = ['https://raw.githubusercontent.com/mrdoob/three.js/4b18dbe78bec6067cd98e66539efe1b157f5635f/examples/models/pcd/ascii/simple.pcd','https://segmentsai-dev.s3.eu-west-2.amazonaws.com/assets/tobias-admin/c92c069f-94b5-4b72-859b-08a7a7a141a4.pcd','https://raw.githubusercontent.com/mrdoob/three.js/4b18dbe78bec6067cd98e66539efe1b157f5635f/examples/models/pcd/binary/Zaghetto.pcd'];
     function setupScene(){
@@ -89,9 +92,6 @@ export default function Scene() {
 
     } 
 
-
-    setupControls()
-    loadPCD()
 
   return (
   <div id="controls">
