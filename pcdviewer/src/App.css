@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+#controls{
+  position: absolute;
+  background-color: transparent;
+  z-index: 1;
+  
+}
