@@ -5,6 +5,8 @@ import { MouseEvent } from "react";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 //@ts-ignore
 import { PCDLoader } from 'three/addons/loaders/PCDLoader.js';
+const urls = ['https://raw.githubusercontent.com/mrdoob/three.js/4b18dbe78bec6067cd98e66539efe1b157f5635f/examples/models/pcd/ascii/simple.pcd','https://segmentsai-dev.s3.eu-west-2.amazonaws.com/assets/tobias-admin/c92c069f-94b5-4b72-859b-08a7a7a141a4.pcd','https://raw.githubusercontent.com/mrdoob/three.js/4b18dbe78bec6067cd98e66539efe1b157f5635f/examples/models/pcd/binary/Zaghetto.pcd'];
+
 
 export default function Scene() {
 
@@ -12,12 +14,12 @@ export default function Scene() {
     const renderer=setupRenderer()
     const camera=setupCamera()
     const loader=setUpLoader()
+    let idx=0
 
     setupControls()
+
     loadPCD()
 
-    let idx=0
-    const urls = ['https://raw.githubusercontent.com/mrdoob/three.js/4b18dbe78bec6067cd98e66539efe1b157f5635f/examples/models/pcd/ascii/simple.pcd','https://segmentsai-dev.s3.eu-west-2.amazonaws.com/assets/tobias-admin/c92c069f-94b5-4b72-859b-08a7a7a141a4.pcd','https://raw.githubusercontent.com/mrdoob/three.js/4b18dbe78bec6067cd98e66539efe1b157f5635f/examples/models/pcd/binary/Zaghetto.pcd'];
     function setupScene(){
         const scene= new THREE.Scene()
         return scene
@@ -43,7 +45,8 @@ export default function Scene() {
     }
     
     
-    function changePCD(e:MouseEvent<HTMLElement>){
+    function changePCD(e:MouseEvent<HTMLElement>,i:number){
+        idx=i
         scene.clear()
         if (idx>=0){
             idx=idx%urls.length
@@ -95,8 +98,8 @@ export default function Scene() {
 
   return (
   <div id="controls">
-    <button  onClick={(e)=>{idx=idx+1 ; changePCD(e)}}  >Prev</button>
-    <button  onClick={(e)=>{idx=idx-1;changePCD(e)}}>Next</button>
+    <button  onClick={(e)=>{  changePCD(e,idx-1)}}  >Prev</button>
+    <button  onClick={(e)=>{changePCD(e,idx+1)}}>Next</button>
 
   </div>
   );
